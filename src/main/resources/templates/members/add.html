@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register Form</title>
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/js/bootstrap.bundle.js"></script>
+</head>
+<body>
+<!--Main Content-->
+<div id="main-content">
+    <div style="padding: 0.5rem">
+        <form action="" th:accept method="post">
+            <fieldset>
+                <legend>Sign Up</legend>
+
+                <div class="form-group">
+                    <label for="userId" class="form-label mt-4">ID</label>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="userId" placeholder="Enter id" aria-label="Enter id" aria-describedby="button-addon2">
+                        <button class="btn btn-primary" type="button" id="button-addon2">Search</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1" class="form-label mt-4">Password</label>
+                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <label for="userName" class="form-label mt-4">User name</label>
+                    <input type="text" class="form-control" id="userName" placeholder="Enter user name">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1" class="form-label mt-4">Email address</label>
+                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                </div>
+                <div class="form-group">
+                    <label for="exampleTextarea" class="form-label mt-4">Memo</label>
+                    <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
+                </div>
+                <div style="padding-top: 0.5rem">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-light">Cancel</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+</body>
+</html>
