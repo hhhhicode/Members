@@ -26,11 +26,11 @@ public class MemberController {
     @PostMapping("/add")
     public String register(@ModelAttribute MemberAddDto memberAddDto) {
         boolean isUserIdDuplicate = memberService.isUserIdDuplicate(memberAddDto.getUserId());
-        //TODO Validation
+//TODO Validation
         if (isUserIdDuplicate) {
             return "/members/add";
         }
-
+//TODO 요청 URI 를 받아서 그쪽으로 redirect 시켜야함.
         Member addMember = memberService.addMember(memberAddDto);
         return "redirect:/";
     }
