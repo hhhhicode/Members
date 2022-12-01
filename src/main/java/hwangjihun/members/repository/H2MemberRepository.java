@@ -3,6 +3,7 @@ package hwangjihun.members.repository;
 import hwangjihun.members.model.Member;
 import hwangjihun.members.model.UpdateParam;
 import hwangjihun.members.model.cond.MemberSearchCond;
+import hwangjihun.members.model.dto.MemberAddDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -43,12 +44,18 @@ public class H2MemberRepository implements MemberRepository {
     }
 
     @Override
-    public Member save(Member member) {
+    public Member save(MemberAddDto addMember) {
 
-        SqlParameterSource param = new BeanPropertySqlParameterSource(member);
+        SqlParameterSource param = new BeanPropertySqlParameterSource(addMember);
         Number key = jdbcInsert.executeAndReturnKey(param);
 
+        Member member = new Member();
         member.setId(key.longValue());
+        member.setUserId(addMember.getUserId());
+        member.setPassword(addMember.getPassword());
+        member.setUserName(addMember.getUserName());
+        member.setEmailAddress(addMember.getEmailAddress());
+        member.setMemo(addMember.getMemo());
 
         return member;
     }
