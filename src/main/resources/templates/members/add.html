@@ -17,7 +17,7 @@
 </head>
 <body>
 <!--Main Content-->
-<div id="main-content">
+<div id="main-contents">
     <div style="padding: 0.5rem">
         <form action="" th:accept method="post" th:object="${memberAddDto}">
             <fieldset>
@@ -25,14 +25,11 @@
                 <!--userId-->
                 <div class="form-group">
                     <label for="userId" class="form-label mt-4">ID</label>
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="userId"
-                               placeholder="Enter id" aria-label="Enter id" aria-describedby="button-addon2"
-                               th:field="*{userId}"
-                               th:errorclass="field-error">
-                        <div class="field-error" th:errors="*{userId}">아이디 오류</div>
-                        <button class="btn btn-primary" type="button" id="button-addon2">Search</button>
-                    </div>
+                    <input type="text" class="form-control" id="userId"
+                           placeholder="Enter id" aria-label="Enter id" aria-describedby="button-addon2"
+                           th:field="*{userId}"
+                           th:errorclass="field-error">
+                    <div class="field-error" th:errors="*{userId}">아이디 오류</div>
                 </div>
                 <!--Password-->
                 <div class="form-group">

@@ -24,14 +24,13 @@ public class MemberService {
         return memberRepository.save(memberAddDto);
     }
 
-    public Member findByUserId(String userId) {
+    public Optional<Member> findByUserId(String userId) {
         MemberSearchCond cond = new MemberSearchCond();
         cond.setUserId(userId);
 
         return memberMapper.findAll(cond)
                 .stream()
-                .findAny()
-                .orElse(null);
+                .findAny();
     }
 
     public boolean isUserIdDuplicate(String userId) {

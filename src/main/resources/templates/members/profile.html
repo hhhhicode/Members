@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div id="main-contents">
+    <div id="member-profile">
+        <legend>Profile</legend>
+        <div id="member-profile-content" th:object="${member}">
+            <div id="user-icon" class="card border-primary mb-3" style="max-width: 20rem;">
+                <div class="card-header">ICON</div>
+                <div class="card-body">
+                    <span th:text="|ICON 추가 예정|">Icon</span>
+                </div>
+            </div>
+            <div id="user-id" class="card border-primary mb-3" style="max-width: 20rem;">
+                <div class="card-header">ID</div>
+                <div class="card-body">
+                    <span th:field="*{userId}" th:text="*{userId}">User Id</span>
+                </div>
+            </div>
+            <div id="user-name" class="card border-primary mb-3" style="max-width: 20rem;">
+                <div class="card-header">Name</div>
+                <div class="card-body">
+                    <span th:field="*{userName}" th:text="*{userName}">Name</span>
+                </div>
+            </div>
+            <div id="user-email-address" class="card border-primary mb-3" style="max-width: 20rem;">
+                <div class="card-header">Email</div>
+                <div class="card-body">
+                    <span th:field="*{emailAddress}" th:text="*{emailAddress}">Email</span>
+                </div>
+            </div>
+            <div id="user-memo" class="card border-primary mb-3" style="max-width: 20rem;">
+                <div class="card-header">Memo</div>
+                <div class="card-body">
+                    <textarea th:field="*{memo}"
+                              style="width: 100%; height: 100%;">
+                        Memo
+                    </textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
