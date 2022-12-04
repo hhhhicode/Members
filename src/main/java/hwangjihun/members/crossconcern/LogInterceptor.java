@@ -20,7 +20,7 @@ public class LogInterceptor implements HandlerInterceptor {
 
         request.setAttribute(LOG_ID, uuid);
 
-        log.info("REQUEST [{}][{}][{}]", uuid, requestURI, handler);
+        log.info("-> REQUEST [{}][{}][{}]", uuid, requestURI, handler);
 
         return true;
     }
@@ -31,6 +31,6 @@ public class LogInterceptor implements HandlerInterceptor {
         String uuid = (String) request.getAttribute(LOG_ID);
         String requestURI = request.getRequestURI();
 
-        log.info("RESPONSE [{}][{}][{}]", uuid, requestURI, handler);
+        log.info("<- RESPONSE [{}][{}][{}]", uuid, requestURI, handler);
     }
 }

@@ -7,6 +7,13 @@
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
     <script src="/js/bootstrap.bundle.js"></script>
+
+    <style>
+        .field-error {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+    </style>
 </head>
 <body>
 <!--Main Content-->
@@ -21,7 +28,9 @@
                     <div class="input-group mb-3">
                         <input type="text" class="form-control" id="userId"
                                placeholder="Enter id" aria-label="Enter id" aria-describedby="button-addon2"
-                               th:field="*{userId}">
+                               th:field="*{userId}"
+                               th:errorclass="field-error">
+                        <div class="field-error" th:errors="*{userId}">아이디 오류</div>
                         <button class="btn btn-primary" type="button" id="button-addon2">Search</button>
                     </div>
                 </div>
@@ -29,28 +38,34 @@
                 <div class="form-group">
                     <label for="exampleInputPassword1" class="form-label mt-4">Password</label>
                     <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password"
-                           th:field="*{password}">
+                           th:field="*{password}"
+                           th:errorclass="field-error">
+                    <div class="field-error" th:errors="*{password}">비밀번호 오류</div>
                 </div>
                 <!--User name-->
                 <div class="form-group">
                     <label for="userName" class="form-label mt-4">User name</label>
                     <input type="text" class="form-control" id="userName" placeholder="Enter user name"
-                           th:field="*{userName}">
+                           th:field="*{userName}"
+                           th:errorclass="field-error">
+                    <div class="field-error" th:errors="*{userName}">이름 오류</div>
                 </div>
                 <!--Email address-->
                 <div class="form-group">
                     <label for="exampleInputEmail1" class="form-label mt-4">Email address</label>
                     <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email"
-                           th:field="*{emailAddress}">
+                           th:field="*{emailAddress}"
+                           th:errorclass="field-error">
+                    <div class="field-error" th:errors="*{emailAddress}">이메일 오류</div>
                     <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                 </div>
                 <!--Memo-->
                 <div class="form-group">
                     <label for="exampleTextarea" class="form-label mt-4">Memo</label>
                     <textarea class="form-control" id="exampleTextarea" rows="3"
-                              th:field="*{memo}">
-
-                    </textarea>
+                              th:field="*{memo}"
+                              th:errorclass="field-error"></textarea>
+                    <div class="field-error" th:errors="*{memo}">메모 오류</div>
                 </div>
                 <!--Submit-->
                 <div style="padding-top: 0.5rem">

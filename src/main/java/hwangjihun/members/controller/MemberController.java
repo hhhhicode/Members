@@ -3,10 +3,15 @@ package hwangjihun.members.controller;
 import hwangjihun.members.model.Member;
 import hwangjihun.members.model.dto.MemberAddDto;
 import hwangjihun.members.service.MemberService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @Controller
 @RequestMapping("/members")
 public class MemberController {
@@ -24,10 +29,10 @@ public class MemberController {
     }
 
     @PostMapping("/add")
-    public String register(@ModelAttribute MemberAddDto memberAddDto) {
+    public String register(@Validated @ModelAttribute MemberAddDto memberAddDto, BindingResult bindingResult) {
         boolean isUserIdDuplicate = memberService.isUserIdDuplicate(memberAddDto.getUserId());
 //TODO Validation
-        if (isUserIdDuplicate) {
+        if (isUserIdDuplicate || bindingResult.hasErrors()) {
             return "/members/add";
         }
 //TODO 요청 URI 를 받아서 그쪽으로 redirect 시켜야함.
