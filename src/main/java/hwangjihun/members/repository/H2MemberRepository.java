@@ -5,6 +5,7 @@ import hwangjihun.members.model.UpdateParam;
 import hwangjihun.members.model.cond.MemberSearchCond;
 import hwangjihun.members.model.dto.MemberAddDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -39,8 +40,11 @@ public class H2MemberRepository implements MemberRepository {
 
     @Override
     public Optional<Member> findById(Long id) {
+        String sql = "SELECT * FROM members WHERE id = :id";
+        SqlParameterSource param = new MapSqlParameterSource()
+                .addValue("id", id);
 
-        return null;
+        return Optional.of(jdbcTemplate.queryForObject(sql, param, BeanPropertyRowMapper.newInstance(Member.class)));
     }
 
     @Override
@@ -61,6 +65,15 @@ public class H2MemberRepository implements MemberRepository {
     }
 
     @Override
+    public int login(Long id) {
+        String sql = "UPDATE members SET login = true WHERE id = :id";
+        SqlParameterSource param = new MapSqlParameterSource()
+                .addValue("id", id);
+
+        return jdbcTemplate.update(sql, param);
+    }
+
+    @Override
     public int update(Long id, UpdateParam param) {
         return 0;
     }
@@ -69,4 +82,5 @@ public class H2MemberRepository implements MemberRepository {
     public int deleteById(Long id) {
         return 0;
     }
+
 }

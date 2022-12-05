@@ -1,5 +1,6 @@
 package hwangjihun.members.controller;
 
+import hwangjihun.members.domain.members.MemberConst;
 import hwangjihun.members.model.Member;
 import hwangjihun.members.model.dto.MemberAddDto;
 import hwangjihun.members.service.MemberService;
@@ -13,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 @Slf4j
@@ -34,7 +36,10 @@ public class MemberController {
      * @return
      */
     @GetMapping("/add")
-    public String registerForm(Model model, @ModelAttribute("memberAddDto") MemberAddDto memberAddDto) {
+    public String registerForm(
+            @ModelAttribute("memberAddDto") MemberAddDto memberAddDto) {
+        //TODO login 되어 있으면 preUri 로 돌아가라.
+
         return "members/add";
     }
 
@@ -42,7 +47,9 @@ public class MemberController {
     public String register(
             @Validated @ModelAttribute MemberAddDto memberAddDto,
             BindingResult bindingResult,
-            RedirectAttributes redirectAttributes, @RequestParam(value = "preUri", defaultValue = "/") String preUri) {
+            RedirectAttributes redirectAttributes,
+            @RequestParam(value = MemberConst.HOME_URI, defaultValue = "/") String homeUri,
+            @RequestParam(value = MemberConst.LOGIN_URI, defaultValue = "/") String loginUri) {
         boolean isUserIdDuplicate = memberService.isUserIdDuplicate(memberAddDto.getUserId());
 
         Optional<Member> findMember = memberService.findByUserId(memberAddDto.getUserId());
@@ -55,22 +62,31 @@ public class MemberController {
             return "members/add";
         }
 
+        //Validation Pass Logic
         Member addMember = memberService.addMember(memberAddDto);
         redirectAttributes.addAttribute("userId", addMember.getUserId());
-        redirectAttributes.addAttribute("preUri", preUri);
+        redirectAttributes.addAttribute(MemberConst.HOME_URI, homeUri);
+        redirectAttributes.addAttribute(MemberConst.LOGIN_URI, loginUri);
+        memberService.login(addMember.getUserId(), addMember.getPassword());
+
+        //TODO Session Storage 사용해서 Login 관리
 
         return "redirect:/members/{userId}/profile";
     }
 
     @GetMapping("{userId}/profile")
-    public String profile(@PathVariable String userId, Model model, @RequestParam(value = "preUri", defaultValue = "/") String preUri) {
+    public String profile(@PathVariable String userId, Model model,
+                          @RequestParam(value = MemberConst.HOME_URI, defaultValue = "/") String homeUri,
+                          @RequestParam(value = MemberConst.LOGIN_URI, defaultValue = "/") String loginUri) {
 
         Optional<Member> findMember = memberService.findByUserId(userId);
         if (findMember.isEmpty()) {
             return "redirect:/";
         }
+
         model.addAttribute("member", findMember.get());
-        model.addAttribute("preUri", preUri);
+        model.addAttribute(MemberConst.HOME_URI, homeUri);
+        model.addAttribute(MemberConst.LOGIN_URI, loginUri);
 
         return "members/profile";
     }

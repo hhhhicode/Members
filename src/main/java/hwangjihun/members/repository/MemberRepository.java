@@ -19,4 +19,6 @@ public interface MemberRepository {
     int update(Long id, UpdateParam param);
 
     int deleteById(Long id);
+
+    int login(Long id);
 }
