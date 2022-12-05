@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -35,13 +34,15 @@ public class MemberController {
      * @return
      */
     @GetMapping("/add")
-    public String registerForm(@ModelAttribute("memberAddDto") MemberAddDto memberAddDto) {
-
-        return "/members/add";
+    public String registerForm(Model model, @ModelAttribute("memberAddDto") MemberAddDto memberAddDto) {
+        return "members/add";
     }
 
     @PostMapping("/add")
-    public String register(@Validated @ModelAttribute MemberAddDto memberAddDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String register(
+            @Validated @ModelAttribute MemberAddDto memberAddDto,
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes, @RequestParam(value = "preUri", defaultValue = "/") String preUri) {
         boolean isUserIdDuplicate = memberService.isUserIdDuplicate(memberAddDto.getUserId());
 
         Optional<Member> findMember = memberService.findByUserId(memberAddDto.getUserId());
@@ -51,25 +52,27 @@ public class MemberController {
         }
 
         if (isUserIdDuplicate || bindingResult.hasErrors()) {
-            return "/members/add";
+            return "members/add";
         }
 
         Member addMember = memberService.addMember(memberAddDto);
         redirectAttributes.addAttribute("userId", addMember.getUserId());
+        redirectAttributes.addAttribute("preUri", preUri);
 
         return "redirect:/members/{userId}/profile";
     }
 
     @GetMapping("{userId}/profile")
-    public String profile(@PathVariable String userId, Model model) {
+    public String profile(@PathVariable String userId, Model model, @RequestParam(value = "preUri", defaultValue = "/") String preUri) {
 
         Optional<Member> findMember = memberService.findByUserId(userId);
         if (findMember.isEmpty()) {
             return "redirect:/";
         }
         model.addAttribute("member", findMember.get());
+        model.addAttribute("preUri", preUri);
 
-        return "/members/profile";
+        return "members/profile";
     }
 
     @GetMapping("/{userId}/exist")
