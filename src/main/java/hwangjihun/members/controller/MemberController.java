@@ -98,7 +98,9 @@ public class MemberController {
 
     @PostMapping("/login")
     public String login(@Validated @ModelAttribute MemberLoginDto memberLoginDto, BindingResult bindingResult,
-                        @RequestParam(defaultValue = "/") String homeUri) {
+                        RedirectAttributes redirectAttributes,
+                        @RequestParam(defaultValue = "/") String homeUri,
+                        @RequestParam(defaultValue = "/") String loginUri) {
 
         //Validation Error Logic
         if (bindingResult.hasErrors()) {
@@ -110,8 +112,9 @@ public class MemberController {
         if (isLogin == false) {
             return "members/login";
         }
-
-        return "redirect:" + homeUri;
+        redirectAttributes.addAttribute(MemberConst.HOME_URI, homeUri);
+        redirectAttributes.addAttribute(MemberConst.LOGIN_ID, memberLoginDto.getUserId());
+        return "redirect:" + loginUri;
     }
 
     @GetMapping("/{userId}/exist")
