@@ -15,7 +15,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 @Slf4j
@@ -92,7 +91,11 @@ public class MemberController {
     }
 
     @GetMapping("/login")
-    public String loginForm(@ModelAttribute("memberLoginDto") MemberLoginDto memberLoginDto) {
+    public String loginForm(Model model,
+                            @ModelAttribute("memberLoginDto") MemberLoginDto memberLoginDto,
+                            @RequestParam(defaultValue = "/") String homeUri) {
+
+        model.addAttribute(MemberConst.HOME_URI, homeUri);
         return "members/login";
     }
 
@@ -112,6 +115,7 @@ public class MemberController {
         if (isLogin == false) {
             return "members/login";
         }
+
         redirectAttributes.addAttribute(MemberConst.HOME_URI, homeUri);
         redirectAttributes.addAttribute(MemberConst.LOGIN_ID, memberLoginDto.getUserId());
         return "redirect:" + loginUri;
