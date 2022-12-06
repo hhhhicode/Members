@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LogIn</title>
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .field-error {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+<div id="main-contents">
+    <div id="login-form"
+         th:object="${memberLoginDto}">
+        <form th:action method="post" style="user-select: auto;">
+            <fieldset style="user-select: auto;">
+                <legend style="user-select: auto;">Login</legend>
+                <!--User Id-->
+                <div class="form-group" style="user-select: auto;">
+                    <label for="user-id" class="form-label mt-4" style="user-select: auto;">User Id</label>
+                    <input th:field="*{userId}"
+                           type="text" class="form-control"
+                           id="user-id"
+                           placeholder="Enter your id"
+                           style="user-select: auto;">
+                    <div class="field-error" th:errors="*{userId}">User Id Error</div>
+                </div>
+                <!--password-->
+                <div class="form-group" style="user-select: auto;">
+                    <label for="exampleInputPassword1" class="form-label mt-4" style="user-select: auto;">Password</label>
+                    <input th:field="*{password}"
+                           type="password" class="form-control"
+                           id="exampleInputPassword1"
+                           th:errorclass="field-error"
+                           placeholder="Password" style="user-select: auto;">
+                    <div class="field-error" th:errors="*{password}">Password Error</div>
+                </div>
+                <!--Submit-->
+                <div style="padding-top: 0.5rem">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-light">Cancel</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+</body>
+</html>

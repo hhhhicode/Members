@@ -3,6 +3,7 @@ package hwangjihun.members.controller;
 import hwangjihun.members.domain.members.MemberConst;
 import hwangjihun.members.model.Member;
 import hwangjihun.members.model.dto.MemberAddDto;
+import hwangjihun.members.model.dto.MemberLoginDto;
 import hwangjihun.members.service.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -45,8 +46,7 @@ public class MemberController {
 
     @PostMapping("/add")
     public String register(
-            @Validated @ModelAttribute MemberAddDto memberAddDto,
-            BindingResult bindingResult,
+            @Validated @ModelAttribute MemberAddDto memberAddDto, BindingResult bindingResult,
             RedirectAttributes redirectAttributes,
             @RequestParam(value = MemberConst.HOME_URI, defaultValue = "/") String homeUri,
             @RequestParam(value = MemberConst.LOGIN_URI, defaultValue = "/") String loginUri) {
@@ -89,6 +89,29 @@ public class MemberController {
         model.addAttribute(MemberConst.LOGIN_URI, loginUri);
 
         return "members/profile";
+    }
+
+    @GetMapping("/login")
+    public String loginForm(@ModelAttribute("memberLoginDto") MemberLoginDto memberLoginDto) {
+        return "members/login";
+    }
+
+    @PostMapping("/login")
+    public String login(@Validated @ModelAttribute MemberLoginDto memberLoginDto, BindingResult bindingResult,
+                        @RequestParam(defaultValue = "/") String homeUri) {
+
+        //Validation Error Logic
+        if (bindingResult.hasErrors()) {
+            return "members/login";
+        }
+
+        //Validation Pass Logic
+        boolean isLogin = memberService.login(memberLoginDto.getUserId(), memberLoginDto.getPassword());
+        if (isLogin == false) {
+            return "members/login";
+        }
+
+        return "redirect:" + homeUri;
     }
 
     @GetMapping("/{userId}/exist")

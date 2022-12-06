@@ -33,16 +33,24 @@ public class MemberService {
                 .findAny();
     }
 
+    /**
+     * Session Storage(members) 에서 LOGIN 컬럼을 true 로 갱신한다.
+     * @param userId
+     * @param password
+     * @return false : 실패, <br>true : 성공
+     */
     public boolean login(String userId, String password) {
         Optional<Member> findMember = findByUserId(userId);
 
         if (findMember.isEmpty()) {
             //TODO login 화면으로 이동
+            return false;
         }
 
         Member member = findMember.get();
         if (!member.getPassword().equals(password)) {
             //TODO login 화면으로 이동
+            return false;
         }
 
         if (memberRepository.login(member.getId()) == 0) {
