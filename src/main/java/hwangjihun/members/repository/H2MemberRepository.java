@@ -1,9 +1,9 @@
 package hwangjihun.members.repository;
 
 import hwangjihun.members.model.Member;
-import hwangjihun.members.model.UpdateParam;
 import hwangjihun.members.model.cond.MemberSearchCond;
 import hwangjihun.members.model.dto.MemberAddDto;
+import hwangjihun.members.model.dto.MemberUpdateDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -64,6 +64,8 @@ public class H2MemberRepository implements MemberRepository {
         return member;
     }
 
+
+
     @Override
     public int login(Long id) {
         String sql = "UPDATE members SET login = true WHERE id = :id";
@@ -74,8 +76,23 @@ public class H2MemberRepository implements MemberRepository {
     }
 
     @Override
-    public int update(Long id, UpdateParam param) {
-        return 0;
+    public int update(Long id, MemberUpdateDto memberUpdateDto) {
+
+        String sql = "UPDATE members SET user_id=:userId, password=:password, " +
+                "icon=:icon, user_name=:userName, " +
+                "email_address=:emailAddress, display_programs=:displayPrograms, memo=:memo " +
+                "WHERE id=:id";
+        SqlParameterSource param = new MapSqlParameterSource()
+                .addValue("userId", memberUpdateDto.getUserId())
+                .addValue("password", memberUpdateDto.getPassword())
+                .addValue("icon", memberUpdateDto.getIcon())
+                .addValue("userName", memberUpdateDto.getUserName())
+                .addValue("emailAddress", memberUpdateDto.getEmailAddress())
+                .addValue("displayPrograms", memberUpdateDto.getDisplayPrograms())
+                .addValue("memo", memberUpdateDto.getMemo())
+                .addValue("id", id);
+
+        return jdbcTemplate.update(sql, param);
     }
 
     @Override

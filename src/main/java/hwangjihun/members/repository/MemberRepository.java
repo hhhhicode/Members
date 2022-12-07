@@ -1,9 +1,9 @@
 package hwangjihun.members.repository;
 
 import hwangjihun.members.model.Member;
-import hwangjihun.members.model.UpdateParam;
 import hwangjihun.members.model.cond.MemberSearchCond;
 import hwangjihun.members.model.dto.MemberAddDto;
+import hwangjihun.members.model.dto.MemberUpdateDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +16,7 @@ public interface MemberRepository {
 
     Member save(MemberAddDto addMember);
 
-    int update(Long id, UpdateParam param);
+    int update(Long id, MemberUpdateDto memberUpdateDto);
 
     int deleteById(Long id);
 

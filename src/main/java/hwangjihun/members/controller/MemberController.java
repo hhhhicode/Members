@@ -4,6 +4,7 @@ import hwangjihun.members.domain.members.MemberConst;
 import hwangjihun.members.model.Member;
 import hwangjihun.members.model.dto.MemberAddDto;
 import hwangjihun.members.model.dto.MemberLoginDto;
+import hwangjihun.members.model.dto.MemberUpdateDto;
 import hwangjihun.members.service.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -36,9 +37,11 @@ public class MemberController {
      * @return
      */
     @GetMapping("/add")
-    public String registerForm(
-            @ModelAttribute("memberAddDto") MemberAddDto memberAddDto) {
-        //TODO login 되어 있으면 preUri 로 돌아가라.
+    public String registerForm(Model model,
+                               @ModelAttribute("memberAddDto") MemberAddDto memberAddDto,
+                               @RequestParam(defaultValue = "/") String homeUri) {
+
+        model.addAttribute(MemberConst.HOME_URI, homeUri);
 
         return "members/add";
     }
@@ -80,7 +83,7 @@ public class MemberController {
 
         Optional<Member> findMember = memberService.findByUserId(userId);
         if (findMember.isEmpty()) {
-            return "redirect:/";
+            return "redirect:" + homeUri;
         }
 
         model.addAttribute("member", findMember.get());
@@ -88,6 +91,54 @@ public class MemberController {
         model.addAttribute(MemberConst.LOGIN_URI, loginUri);
 
         return "members/profile";
+    }
+
+    @GetMapping("/{userId}/update")
+    public String profileUpdateForm(@PathVariable String userId, Model model,
+                                    @RequestParam(value = MemberConst.HOME_URI, defaultValue = "/") String homeUri,
+                                    @ModelAttribute("memberUpdateDto") MemberUpdateDto memberUpdateDto) {
+
+        Optional<Member> findMember = memberService.findByUserId(userId);
+        if (findMember.isEmpty()) {
+            return "redirect:" + homeUri;
+        }
+
+        memberToMemberUpdateDto(memberUpdateDto, findMember);
+
+        model.addAttribute("homeUri", homeUri);
+        model.addAttribute("userId", findMember.get().getUserId());
+
+        return "members/update";
+    }
+
+    @PostMapping("/{userId}/update")
+    public String profileUpdate(@PathVariable String userId, Model model,
+                                @ModelAttribute MemberUpdateDto memberUpdateDto,
+                                RedirectAttributes redirectAttributes) {
+
+        Optional<Member> findMember = memberService.findByUserId(userId);
+        Object homeUri = model.getAttribute("homeUri");
+        //없는 Member 일 때
+        if (findMember.isEmpty()) {
+            return "redirect:" + homeUri;
+        }
+
+        //있는 Member 라면
+        memberService.update(findMember.get().getId(), memberUpdateDto);
+
+        redirectAttributes.addAttribute(MemberConst.HOME_URI, homeUri);
+
+        return "redirect:profile";
+    }
+
+    private static void memberToMemberUpdateDto(MemberUpdateDto memberUpdateDto, Optional<Member> findMember) {
+        memberUpdateDto.setIcon(findMember.get().getIcon());
+        memberUpdateDto.setUserName(findMember.get().getUserName());
+        memberUpdateDto.setMemo(findMember.get().getMemo());
+        memberUpdateDto.setPassword(findMember.get().getPassword());
+        memberUpdateDto.setUserId(findMember.get().getUserId());
+        memberUpdateDto.setEmailAddress(findMember.get().getEmailAddress());
+        memberUpdateDto.setDisplayPrograms(findMember.get().getDisplayPrograms());
     }
 
     @GetMapping("/login")

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update</title>
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div id="main-contents">
+    <div id="member-profile">
+        <legend>Profile Update</legend>
+        <form action="" th:accept method="post" th:object="${memberUpdateDto}">
+            <!--ICON-->
+            <div id="user-icon" class="card border-primary mb-3" style="max-width: 20rem;">
+                <div class="card-header">ICON</div>
+                <div class="card-body">
+                    <span th:text="|ICON 추가 예정|">Icon</span>
+                </div>
+            </div>
+            <!--User Id-->
+            <div id="user-id" class="card border-primary mb-3" style="max-width: 20rem;">
+                <div class="card-header">ID</div>
+                <div class="card-body">
+                    <input id="userId"
+                           type="text" class="form-control" placeholder="Id"
+                           th:field="*{userId}"
+                           readonly>
+                </div>
+            </div>
+            <!--Password-->
+            <div id="user-password" class="card border-primary mb-3" style="max-width: 20rem;">
+                <div class="card-header">Password</div>
+                <div class="card-body">
+                    <input id="password"
+                           type="text" class="form-control" placeholder="password"
+                           th:field="*{password}">
+                </div>
+            </div>
+            <!--User Name-->
+            <div id="user-name" class="card border-primary mb-3" style="max-width: 20rem;">
+                <div class="card-header">Name</div>
+                <div class="card-body">
+                    <input id="userName"
+                           type="text" class="form-control" placeholder="userName"
+                           th:field="*{userName}">
+                </div>
+            </div>
+            <!--Email Address-->
+            <div id="user-email-address" class="card border-primary mb-3" style="max-width: 20rem;">
+                <div class="card-header">Email</div>
+                <div class="card-body">
+                    <input id="emailAddress"
+                           type="email" class="form-control" placeholder="Email"
+                           th:field="*{emailAddress}">
+                </div>
+            </div>
+            <!--Display Progress-->
+            <div id="user-display-Progress" class="card border-primary mb-3" style="max-width: 20rem;">
+                <div class="card-header">Display Programs</div>
+                <div class="card-body">
+                    <input id="displayPrograms"
+                           type="text" class="form-control" placeholder="DisplayPrograms"
+                           th:field="*{displayPrograms}">
+                </div>
+            </div>
+            <!--Memo-->
+            <div id="user-memo" class="card border-primary mb-3" style="max-width: 20rem;">
+                <div class="card-header">Memo</div>
+                <div class="card-body">
+                    <textarea th:field="*{memo}"
+                              style="width: 100%; height: 100%;">
+                        Memo
+                    </textarea>
+                </div>
+            </div>
+            <!--Submit-->
+            <div style="padding-top: 0.5rem">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <a class="btn btn-light" th:href="@{${homeUri}}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

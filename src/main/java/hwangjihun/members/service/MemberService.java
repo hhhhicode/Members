@@ -3,6 +3,7 @@ package hwangjihun.members.service;
 import hwangjihun.members.model.Member;
 import hwangjihun.members.model.cond.MemberSearchCond;
 import hwangjihun.members.model.dto.MemberAddDto;
+import hwangjihun.members.model.dto.MemberUpdateDto;
 import hwangjihun.members.repository.MemberRepository;
 import hwangjihun.members.repository.mybatis.MemberMapper;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,11 @@ public class MemberService {
         return memberMapper.findAll(cond)
                 .stream()
                 .findAny();
+    }
+
+    public int update(Long id, MemberUpdateDto memberUpdateDto) {
+
+        return memberRepository.update(id, memberUpdateDto);
     }
 
     /**
