@@ -8,6 +8,7 @@ import hwangjihun.members.model.dto.MemberUpdateDto;
 import hwangjihun.members.repository.MemberRepository;
 import hwangjihun.members.repository.mybatis.MemberMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -22,7 +23,9 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
+    @Transactional
     public Member addMember(MemberAddDto memberAddDto) {
+
         return memberRepository.save(memberAddDto);
     }
 
@@ -35,6 +38,7 @@ public class MemberService {
                 .findAny();
     }
 
+    @Transactional
     public int update(Long id, MemberUpdateDto memberUpdateDto) {
 
         return memberRepository.update(id, memberUpdateDto);
@@ -67,12 +71,8 @@ public class MemberService {
         return true;
     }
 
-    public boolean isUserIdDuplicate(String userId) {
-        MemberSearchCond cond = new MemberSearchCond();
-        cond.setUserId(userId);
-        Optional<Member> memberOptional = memberMapper.findAll(cond)
-                .stream()
-                .findAny();
+    public Boolean isUserIdDuplicate(String userId) {
+        Optional<Member> memberOptional = findByUserId(userId);
         if (memberOptional.isPresent()) {
             return true;
         }

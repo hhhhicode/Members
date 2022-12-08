@@ -54,4 +54,10 @@ public class ExternalFormMemberController {
 
         return memberService.addMember(memberAddDto);
     }
+
+    @ResponseBody
+    @GetMapping("/{userId}/exist")
+    public String userIdExistCheck(@PathVariable String userId) {
+        return memberService.isUserIdDuplicate(userId).toString();
+    }
 }

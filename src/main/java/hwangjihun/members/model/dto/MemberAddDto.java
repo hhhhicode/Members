@@ -18,4 +18,5 @@ public class MemberAddDto {
     private String emailAddress;
     @Length(max = 1000)
     private String memo;
+    private Boolean login = false;
 }
