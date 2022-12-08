@@ -58,10 +58,8 @@
             <!--Display Progress-->
             <div id="user-display-Progress" class="card border-primary mb-3" style="max-width: 20rem;">
                 <div class="card-header">Display Programs</div>
-                <div class="card-body">
-                    <input id="displayPrograms"
-                           type="text" class="form-control" placeholder="DisplayPrograms"
-                           th:field="*{displayPrograms}">
+                <div class="card-body" th:each="program : ${programMap}">
+                    <input type="checkbox" th:field="${programMap}">
                 </div>
             </div>
             <!--Memo-->

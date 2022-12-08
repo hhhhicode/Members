@@ -7,6 +7,7 @@ import hwangjihun.members.model.dto.MemberLoginDto;
 import hwangjihun.members.model.dto.MemberUpdateDto;
 import hwangjihun.members.service.MemberService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Controller
@@ -28,6 +29,9 @@ public class MemberController {
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
     }
+
+    @Value("${display.programs}")
+    private String displayPrograms;
 
     /**
      * 1. Client Server -> 2. 회원가입 -> 3. 회원가입 완료 페이지, '확인' -> 4. Client Server 의 페이지로 돌아가기
@@ -105,25 +109,37 @@ public class MemberController {
 
         memberToMemberUpdateDto(memberUpdateDto, findMember);
 
-        model.addAttribute("homeUri", homeUri);
+        List<String> indexList = Arrays.asList(displayPrograms.split(","));
+        Map<String, String> programMap = new LinkedHashMap<>();
+        for (String s : indexList) {
+            programMap.put(s, getNameMapping(s));
+        }
+
         model.addAttribute("userId", findMember.get().getUserId());
+        model.addAttribute("programMap", programMap);
 
         return "members/update";
     }
 
     @PostMapping("/{userId}/update")
     public String profileUpdate(@PathVariable String userId, Model model,
-                                @ModelAttribute MemberUpdateDto memberUpdateDto,
+                                @RequestParam(value = MemberConst.HOME_URI, defaultValue = "/") String homeUri,
+                                @Validated @ModelAttribute MemberUpdateDto memberUpdateDto, BindingResult bindingResult,
                                 RedirectAttributes redirectAttributes) {
 
         Optional<Member> findMember = memberService.findByUserId(userId);
-        Object homeUri = model.getAttribute("homeUri");
         //없는 Member 일 때
         if (findMember.isEmpty()) {
             return "redirect:" + homeUri;
         }
 
         //있는 Member 라면
+        if (memberUpdateDto.getUserId().equals(memberUpdateDto.getPassword())) {
+            bindingResult.reject("passwordEqualUserId", null, null);
+        }
+
+
+
         memberService.update(findMember.get().getId(), memberUpdateDto);
 
         redirectAttributes.addAttribute(MemberConst.HOME_URI, homeUri);
@@ -180,5 +196,16 @@ public class MemberController {
     @GetMapping("/{emailAddress}/exist")
     public ResponseEntity<Boolean> isEmailAddressDuplicate(@PathVariable String emailAddress) {
         return ResponseEntity.ok(memberService.isEmailAddressDuplicate(emailAddress));
+    }
+
+    public String getNameMapping(String index) {
+        switch (index) {
+            case "80":
+                return "Poe Item Values";
+            case "90":
+                return "Error Center";
+        }
+
+        return "";
     }
 }

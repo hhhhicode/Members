@@ -3,6 +3,7 @@ package hwangjihun.members.service;
 import hwangjihun.members.model.Member;
 import hwangjihun.members.model.cond.MemberSearchCond;
 import hwangjihun.members.model.dto.MemberAddDto;
+import hwangjihun.members.model.dto.MemberLoginDto;
 import hwangjihun.members.model.dto.MemberUpdateDto;
 import hwangjihun.members.repository.MemberRepository;
 import hwangjihun.members.repository.mybatis.MemberMapper;
@@ -88,5 +89,19 @@ public class MemberService {
             return true;
         }
         return false;
+    }
+
+    public Optional<Member> login(MemberLoginDto memberLoginDto) {
+        Optional<Member> findMember = findByUserId(memberLoginDto.getUserId());
+        if (findMember.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Member member = findMember.get();
+        if (!member.getPassword().equals(memberLoginDto.getPassword())) {
+            return Optional.empty();
+        }
+
+        return findMember;
     }
 }

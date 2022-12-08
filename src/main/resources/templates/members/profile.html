@@ -48,9 +48,9 @@
     </div>
     <div id="recall-button">
         <a class="btn btn-primary btn-lg" style="user-select: auto;"
-           th:href="@{${loginUri}(homeUri=${homeUri}, userId=${userId})}">돌아가기</a>
+           th:href="@{${homeUri}}">돌아가기</a>
         <a class="btn btn-primary btn-lg" style="user-select: auto;"
-           th:href="@{update}">수정하기</a>
+           th:href="@{/members/{userId}/update(userId=${userId}, homeUri = ${homeUri})}">수정하기</a>
     </div>
 </div>
 </body>
