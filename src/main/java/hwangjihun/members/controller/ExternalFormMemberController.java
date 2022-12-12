@@ -43,7 +43,7 @@ public class ExternalFormMemberController {
         Optional<Member> findMember = memberService.findByUserId(memberAddDto.getUserId());
         if (findMember.isPresent()) {
             bindingResult.addError(new FieldError("memberAddDto", "userId",
-                    memberAddDto.getUserId(), false, null, null, "중복된 아이디가 있습니다."));
+                    memberAddDto.getUserId(), false, new String[]{"exist.memberAddDto.userId"}, null, null));
         }
         boolean isUserIdDuplicate = memberService.isUserIdDuplicate(memberAddDto.getUserId());
         if (isUserIdDuplicate || bindingResult.hasErrors()) {
