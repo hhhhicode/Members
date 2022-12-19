@@ -4,6 +4,7 @@ import hwangjihun.members.domain.members.MemberConst;
 import hwangjihun.members.model.Member;
 import hwangjihun.members.model.dto.MemberAddDto;
 import hwangjihun.members.model.dto.MemberLoginDto;
+import hwangjihun.members.model.dto.MemberProfileDto;
 import hwangjihun.members.service.MemberService;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-@Controller
+@RestController
 @RequestMapping("/external/members")
 public class ExternalFormMemberController {
 
@@ -24,7 +25,17 @@ public class ExternalFormMemberController {
         this.memberService = memberService;
     }
 
-    @ResponseBody
+    @GetMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public MemberProfileDto findByUserIdForProfile(@PathVariable String userId) {
+        Optional<MemberProfileDto> findMemberProfileDto = memberService.findByUserIdForProfile(userId);
+
+        if (findMemberProfileDto.isEmpty()) {
+            return new MemberProfileDto();
+        }
+
+        return findMemberProfileDto.get();
+    }
+
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     public Member login(@RequestBody MemberLoginDto memberLoginDto) {
         Optional<Member> loginMember = memberService.login(memberLoginDto);
@@ -35,7 +46,6 @@ public class ExternalFormMemberController {
         return loginMember.get();
     }
 
-    @ResponseBody
     @PostMapping(value = "/add", produces = MediaType.APPLICATION_JSON_VALUE)
     public Member add(@Validated @RequestBody MemberAddDto memberAddDto, BindingResult bindingResult) {
 
@@ -55,9 +65,25 @@ public class ExternalFormMemberController {
         return memberService.addMember(memberAddDto);
     }
 
-    @ResponseBody
     @GetMapping("/{userId}/exist")
     public String userIdExistCheck(@PathVariable String userId) {
         return memberService.isUserIdDuplicate(userId).toString();
+    }
+
+    @DeleteMapping("/{userId}")
+    public Boolean delete(@PathVariable String userId) {
+
+        Optional<Member> findMember = memberService.findByUserId(userId);
+        if (findMember.isEmpty()) {
+            return false;
+        }
+
+        Member targetMember = findMember.get();
+        int deleteNum = memberService.delete(targetMember.getId());
+        if (deleteNum == 0) {
+            return false;
+        }
+
+        return true;
     }
 }

@@ -4,6 +4,7 @@ import hwangjihun.members.model.Member;
 import hwangjihun.members.model.cond.MemberSearchCond;
 import hwangjihun.members.model.dto.MemberAddDto;
 import hwangjihun.members.model.dto.MemberLoginDto;
+import hwangjihun.members.model.dto.MemberProfileDto;
 import hwangjihun.members.model.dto.MemberUpdateDto;
 import hwangjihun.members.repository.MemberRepository;
 import hwangjihun.members.repository.mybatis.MemberMapper;
@@ -38,10 +39,38 @@ public class MemberService {
                 .findAny();
     }
 
+    public Optional<MemberProfileDto> findByUserIdForProfile(String userId) {
+
+        Optional<Member> findMember = findByUserId(userId);
+
+        //Member 가 없다면
+        if (findMember.isEmpty()) {
+            return Optional.empty();
+        }
+
+        //Member 가 있다면
+        Member member = findMember.get();
+        MemberProfileDto memberProfileDto = new MemberProfileDto();
+        memberProfileDto.setUserId(member.getUserId());
+        memberProfileDto.setIcon(member.getIcon());
+        memberProfileDto.setUserName(member.getUserName());
+        memberProfileDto.setEmailAddress(member.getEmailAddress());
+        memberProfileDto.setDisplayPrograms(member.getDisplayPrograms());
+        memberProfileDto.setMemo(member.getMemo());
+
+        return Optional.of(memberProfileDto);
+    }
+
     @Transactional
     public int update(Long id, MemberUpdateDto memberUpdateDto) {
 
         return memberRepository.update(id, memberUpdateDto);
+    }
+
+    @Transactional
+    public int delete(Long id) {
+
+        return memberRepository.deleteById(id);
     }
 
     /**

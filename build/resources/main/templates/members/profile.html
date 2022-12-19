@@ -46,6 +46,12 @@
             </div>
         </div>
     </div>
+    <div id="recall-button">
+        <a class="btn btn-primary btn-lg" style="user-select: auto;"
+           th:href="@{${homeUri}}">돌아가기</a>
+        <a class="btn btn-primary btn-lg" style="user-select: auto;"
+           th:href="@{/members/{userId}/update(userId=${userId}, homeUri = ${homeUri})}">수정하기</a>
+    </div>
 </div>
 </body>
 </html>

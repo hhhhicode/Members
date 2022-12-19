@@ -98,7 +98,12 @@ public class H2MemberRepository implements MemberRepository {
 
     @Override
     public int deleteById(Long id) {
-        return 0;
+
+        String sql = "DELETE FROM members WHERE id = :id";
+        SqlParameterSource param = new MapSqlParameterSource()
+                .addValue("id", id);
+
+        return jdbcTemplate.update(sql, param);
     }
 
 }
